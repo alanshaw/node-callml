@@ -2,3 +2,4 @@ node_modules
 coverage
 .callmlrc
 npm-debug.log
+.DS_Store

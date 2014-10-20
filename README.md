@@ -1,4 +1,4 @@
-# node-callml
+# node-callml [![Build Status](http://img.shields.io/travis/alanshaw/node-callml.svg?style=flat)](https://travis-ci.org/alanshaw/node-callml) [![Dependency Status](https://david-dm.org/alanshaw/node-callml.svg?style=flat)](https://david-dm.org/alanshaw/node-callml)
 Sends applications to CallML 6.1.1 service
 
 ## Getting started
@@ -29,7 +29,7 @@ var applicant = {}
 // Perform search
 service.search(applicant, function (er, res) {
   if (er) throw er
-  assert(res.appverified.toLowerCase() == 'yes')
+  assert(res.results.appverified.toLowerCase() == 'yes')
 })
 ```
 

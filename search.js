@@ -1,6 +1,6 @@
 var Joi = require('joi')
-var data2xml = require('data2xml')()
-var xml2js = require('xml2js')
+var js2xml = require('data2xml')({xmlDecl: false})
+var xml2json = require('xml2json')
 
 var searchSchema = Joi.object().keys({
   searchpurpose: Joi.any().valid('AP', 'AQ', 'IP', 'IQ', 'ML', 'MP', 'TS'),
@@ -96,7 +96,7 @@ var searchSchema = Joi.object().keys({
       contact: Joi.object().keys({
         email: Joi.object().keys({
           type: Joi.string().length(2),
-          address: Joi.string().max(100)
+          address: Joi.string().email().max(100)
         }),
         telephone: Joi.object().keys({
           type: Joi.string().length(2),
@@ -158,7 +158,7 @@ var searchSchema = Joi.object().keys({
   numsearches: Joi.number().integer(),
   timeframeofsearch: Joi.number(),
   searchtelephone: Joi.boolean().required(),
-  telephonedata: Joi.any().valid(1, 2, 3).required(),
+  telephonedata: Joi.any().valid(1, 2, 3),
   ipaddress: Joi.string().max(15),
   yourreference: Joi.string().max(50)
 }).required()
@@ -166,7 +166,7 @@ var searchSchema = Joi.object().keys({
 /**
 * Send a primary search request to the CallML service
 */
-function search (applicant, opts, cb) {
+function search (searchData, opts, cb) {
   if (!cb) {
     cb = opts
     opts = {}
@@ -176,24 +176,30 @@ function search (applicant, opts, cb) {
 
   var service = this
 
-  searchSchema.validate(applicant, function (er, app) {
+  searchSchema.validate(searchData, function (er, searchData) {
     if (er) return cb(er)
 
     var data = {
-      _attr: {xmlns: search.namespace},
-      searchDefinition: {primarySearch: app}
+      _attr: {
+        xmlns: search.namespace
+      },
+      searchDefinition: {
+        parameters: {
+          primarysearch: searchData
+        }
+      }
     }
 
-    service.send(search.action, data2xml('Search06b', data), opts, function (er, res, body) {
+    service.send(search.action, js2xml('Search06b', data), opts, function (er, res, xml) {
       if (er) return cb(er)
       if (res.statusCode != 200) return cb(new Error("Unexpected service status " + res.statusCode))
 
-      try {
-        var result = xml2js(body)['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult
-        cb(null, result)
-      } catch (er) {
-        cb(new Error('Unexpected response format'))
-      }
+        try {
+          var obj = JSON.parse(xml2json.toJson(xml))
+          cb(null, obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult)
+        } catch (er) {
+          cb(new Error('Unexpected response format ' + xml))
+        }
     })
   })
 }

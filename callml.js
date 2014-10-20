@@ -1,4 +1,5 @@
 var Joi = require('joi')
+var request = require('request')
 
 function CallMLService (config) {
   if (!(this instanceof CallMLService)) return new CallMLService(config)
@@ -41,6 +42,8 @@ CallMLService.prototype.send = function (action, body, opts, cb) {
                    '</soap:Header>' +
                    '<soap:Body>' + body + '</soap:Body>' +
                  '</soap:Envelope>'
+
+  //console.log(envelope)
 
   opts.url = opts.url || config.url
   opts.headers = opts.headers || headers
