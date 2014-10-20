@@ -12,7 +12,7 @@ var searchSchema = Joi.object().keys({
       surname: Joi.string().max(30).required()
     }).required(),
     aliases: Joi.object().keys({
-      Joi.object().keys({
+      name: Joi.object().keys({
         title: Joi.string().max(30).required(),
         forename: Joi.string().max(30).required(),
         othernames: Joi.string().max(30),
@@ -34,12 +34,12 @@ var searchSchema = Joi.object().keys({
         buildingname: Joi.string().max(30),
         street1: Joi.string().max(50),
         street2: Joi.string().max(50),
-        sublocality: Joi.string.max(35),
-        locality: Joi.string.max(35),
-        posttown: Joi.string.max(25),
+        sublocality: Joi.string().max(35),
+        locality: Joi.string().max(35),
+        posttown: Joi.string().max(25),
         postcode: Joi.string().max(8).required(),
         addresstype: Joi.any().valid('long').required()
-      }).or('abodeno', 'buildingno', 'buildingname'),
+      }).or('abodeno', 'buildingno', 'buildingname')
     ).required(),
     previousaddress: Joi.object().keys({
       abodeno: Joi.string().max(30),
@@ -49,9 +49,9 @@ var searchSchema = Joi.object().keys({
       premisename: Joi.string().max(30),
       street1: Joi.string().max(50),
       street2: Joi.string().max(50),
-      sublocality: Joi.string.max(35),
-      locality: Joi.string.max(35),
-      posttown: Joi.string.max(25),
+      sublocality: Joi.string().max(35),
+      locality: Joi.string().max(35),
+      posttown: Joi.string().max(25),
       postcode: Joi.string().max(8),
       addresstype: Joi.any().valid('long')
     }),
@@ -95,13 +95,13 @@ var searchSchema = Joi.object().keys({
       }),
       contact: Joi.object().keys({
         email: Joi.object().keys({
-          type: Joi.string().length(2)
+          type: Joi.string().length(2),
           address: Joi.string().max(100)
         }),
         telephone: Joi.object().keys({
-          type: Joi.string().length(2)
-          std: Joi.number().integer().max(9999999999)
-          number: Joi.number().integer().max(99999999999999999999)
+          type: Joi.string().length(2),
+          std: Joi.number().integer().max(9999999999),
+          number: Joi.number().integer().max(99999999999999999999),
           extension: Joi.number().integer().max(99999999)
         })
       }),
@@ -140,7 +140,7 @@ var searchSchema = Joi.object().keys({
         })
       })
     })
-  }).required()
+  }).required(),
   searchdirectors: Joi.boolean().required(),
   excludesharegroups: Joi.string().max(20),
   excludeshareaccounttypes: Joi.string().max(350),
@@ -180,7 +180,7 @@ function search (applicant, opts, cb) {
     if (er) return cb(er)
 
     var data = {
-      _attr: {xmlns: search.namespace}
+      _attr: {xmlns: search.namespace},
       searchDefinition: {primarySearch: app}
     }
 

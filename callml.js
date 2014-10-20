@@ -4,7 +4,7 @@ function CallMLService (config) {
   if (!(this instanceof CallMLService)) return new CallMLService(config)
 
   Joi.assert(config, Joi.object().keys({
-    url: Joi,string().required(),
+    url: Joi.string().required(),
     company: Joi.string().required(),
     username: Joi.string().required(),
     password: Joi.string().required()
