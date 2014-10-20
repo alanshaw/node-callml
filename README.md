@@ -1,4 +1,4 @@
-# node-callml [![Build Status](http://img.shields.io/travis/alanshaw/node-callml.svg?style=flat)](https://travis-ci.org/alanshaw/node-callml) [![Dependency Status](https://david-dm.org/alanshaw/node-callml.svg?style=flat)](https://david-dm.org/alanshaw/node-callml)
+# node-callml [![Dependency Status](https://david-dm.org/alanshaw/node-callml.svg?style=flat)](https://david-dm.org/alanshaw/node-callml)
 Sends applications to CallML 6.1.1 service
 
 ## Usage
