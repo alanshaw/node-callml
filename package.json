@@ -1,0 +1,22 @@
+{
+  "name": "callml",
+  "version": "0.0.0",
+  "description": "CallML client for node",
+  "main": "callml.js",
+  "scripts": {
+    "test": "tape test.js",
+    "coverage": "istanbul cover node_modules/tape/bin/tape test.js"
+  },
+  "author": "Alan Shaw",
+  "license": "MIT",
+  "devDependencies": {
+    "istanbul": "^0.3.2",
+    "tape": "^3.0.1"
+  },
+  "dependencies": {
+    "data2xml": "^1.2.0",
+    "joi": "^4.7.0",
+    "request": "^2.45.0",
+    "xml2js": "^0.4.4"
+  }
+}
