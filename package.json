@@ -18,5 +18,20 @@
     "joi": "^4.7.0",
     "request": "^2.45.0",
     "xml2json": "^0.5.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alanshaw/node-callml.git"
+  },
+  "keywords": [
+    "callml",
+    "money",
+    "laundering",
+    "identity",
+    "validation"
+  ],
+  "bugs": {
+    "url": "https://github.com/alanshaw/node-callml/issues"
+  },
+  "homepage": "https://github.com/alanshaw/node-callml"
 }
