@@ -17,7 +17,7 @@
     "data2xml": "^1.2.0",
     "joi": "^4.7.0",
     "request": "^2.45.0",
-    "xml2json": "^0.5.1"
+    "xml2js": "^0.4.4"
   },
   "repository": {
     "type": "git",

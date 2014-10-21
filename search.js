@@ -1,6 +1,6 @@
 var Joi = require('joi')
 var js2xml = require('data2xml')({xmlDecl: false})
-var xml2json = require('xml2json')
+var xml2js = require('xml2js')
 
 var searchSchema = Joi.object().keys({
   searchpurpose: Joi.any().valid('AP', 'AQ', 'IP', 'IQ', 'ML', 'MP', 'TS'),
@@ -194,12 +194,14 @@ function search (searchData, opts, cb) {
       if (er) return cb(er)
       if (res.statusCode != 200) return cb(new Error("Unexpected service status " + res.statusCode))
 
+      xml2js.parseString(xml, {explicitArray: false}, function (er, obj) {
+        if (er) return cb(er)
         try {
-          var obj = JSON.parse(xml2json.toJson(xml))
           cb(null, obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult)
         } catch (er) {
-          cb(new Error('Unexpected response format ' + xml))
+          cb(new Error('Unexpected response format ' + obj))
         }
+      })
     })
   })
 }
