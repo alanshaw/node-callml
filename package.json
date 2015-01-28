@@ -1,6 +1,6 @@
 {
   "name": "callml",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CallML client for node",
   "main": "callml.js",
   "scripts": {
