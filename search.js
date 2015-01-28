@@ -197,10 +197,11 @@ function search (searchData, opts, cb) {
       xml2js.parseString(xml, {explicitArray: false}, function (er, obj) {
         if (er) return cb(er)
         try {
-          cb(null, obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult)
+          var callmlResult = obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult
         } catch (er) {
-          cb(new Error('Unexpected response format ' + obj))
+          return cb(new Error('Unexpected response format ' + obj))
         }
+        cb(null, callmlResult)
       })
     })
   })
