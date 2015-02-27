@@ -1,5 +1,9 @@
 var Joi = require('joi')
-var js2xml = require('data2xml')({xmlDecl: false})
+var js2xml = require('data2xml')({
+  xmlDecl: false,
+  'undefined': 'empty',
+  'null': 'closed'
+})
 var xml2js = require('xml2js')
 
 var searchSchema = Joi.object().keys({
@@ -23,7 +27,12 @@ var searchSchema = Joi.object().keys({
       // Short form
       Joi.object().keys({
         premiseno: Joi.string().max(30),
-        premisename: Joi.string().max(30),
+        premisename: Joi.string().max(50),
+        street1: Joi.string().max(50),
+        street2: Joi.string().max(50),
+        sublocality: Joi.string().max(35),
+        locality: Joi.string().max(35),
+        posttown: Joi.string().max(25),
         postcode: Joi.string().max(8).required(),
         addresstype: Joi.any().valid('short').required()
       }).or('premiseno', 'premisename'),
@@ -31,7 +40,7 @@ var searchSchema = Joi.object().keys({
       Joi.object().keys({
         abodeno: Joi.string().max(30),
         buildingno: Joi.string().max(12),
-        buildingname: Joi.string().max(30),
+        buildingname: Joi.string().max(50),
         street1: Joi.string().max(50),
         street2: Joi.string().max(50),
         sublocality: Joi.string().max(35),
@@ -41,20 +50,33 @@ var searchSchema = Joi.object().keys({
         addresstype: Joi.any().valid('long').required()
       }).or('abodeno', 'buildingno', 'buildingname')
     ).required(),
-    previousaddress: Joi.object().keys({
-      abodeno: Joi.string().max(30),
-      buildingno: Joi.string().max(12),
-      buildingname: Joi.string().max(30),
-      premiseno: Joi.string().max(30),
-      premisename: Joi.string().max(30),
-      street1: Joi.string().max(50),
-      street2: Joi.string().max(50),
-      sublocality: Joi.string().max(35),
-      locality: Joi.string().max(35),
-      posttown: Joi.string().max(25),
-      postcode: Joi.string().max(8),
-      addresstype: Joi.any().valid('long')
-    }),
+    previousaddress: Joi.alternatives().try(
+      // Short form
+      Joi.object().keys({
+        premiseno: Joi.string().max(30),
+        premisename: Joi.string().max(50),
+        street1: Joi.string().max(50),
+        street2: Joi.string().max(50),
+        sublocality: Joi.string().max(35),
+        locality: Joi.string().max(35),
+        posttown: Joi.string().max(25),
+        postcode: Joi.string().max(8).required(),
+        addresstype: Joi.any().valid('short').required()
+      }).or('premiseno', 'premisename'),
+      // Long form
+      Joi.object().keys({
+        abodeno: Joi.string().max(30),
+        buildingno: Joi.string().max(12),
+        buildingname: Joi.string().max(50),
+        street1: Joi.string().max(50),
+        street2: Joi.string().max(50),
+        sublocality: Joi.string().max(35),
+        locality: Joi.string().max(35),
+        posttown: Joi.string().max(25),
+        postcode: Joi.string().max(8).required(),
+        addresstype: Joi.any().valid('long').required()
+      }).or('abodeno', 'buildingno', 'buildingname')
+    ),
     telephone: Joi.object().keys({
       std: Joi.number().integer().max(999999),
       number: Joi.number().integer().max(99999999999)
