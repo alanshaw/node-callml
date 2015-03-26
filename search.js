@@ -5,6 +5,7 @@ var js2xml = require('data2xml')({
   'null': 'closed'
 })
 var xml2js = require('xml2js')
+var moment = require('moment')
 
 var searchSchema = Joi.object().keys({
   searchpurpose: Joi.any().valid('AP', 'AQ', 'IP', 'IQ', 'ML', 'MP', 'TS'),
@@ -201,6 +202,11 @@ function search (searchData, opts, cb) {
   searchSchema.validate(searchData, function (er, searchData) {
     if (er) return cb(er)
 
+    // Format DOB as expected by XML date type
+    if (searchData.applicant.dateofbirth) {
+      searchData.applicant.dateofbirth = moment(searchData.applicant.dateofbirth).format('YYYY-MM-DD')
+    }
+
     var data = {
       _attr: {
         xmlns: search.namespace
@@ -218,11 +224,15 @@ function search (searchData, opts, cb) {
 
       xml2js.parseString(xml, {explicitArray: false}, function (er, obj) {
         if (er) return cb(er)
+
+        var callmlResult
+
         try {
-          var callmlResult = obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult
+          callmlResult = obj['soap:Envelope']['soap:Body'].Search06bResponse.Search06bResult
         } catch (er) {
           return cb(new Error('Unexpected response format ' + obj))
         }
+
         cb(null, callmlResult)
       })
     })

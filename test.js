@@ -33,7 +33,7 @@ test('Test searchpurpose validation', function (t) {
 
   t.plan(3)
 
-  service.search(searchData, function (er, response) {
+  service.search(searchData, function (er) {
     t.ok(er, 'Expected error')
     t.equal(er.name, 'ValidationError', 'Expected validation error')
     t.ok(
@@ -57,7 +57,8 @@ test('Test Julia Audi passes', function (t) {
         premiseno: '1',
         postcode: 'X99LF',
         addresstype: 'short'
-      }
+      },
+      dateofbirth: '1910-01-01'
     },
     searchdirectors: true,
     searchtelephone: false,
