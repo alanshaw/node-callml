@@ -84,20 +84,20 @@ var searchSchema = Joi.object().keys({
     }),
     addrlessthan12months: Joi.boolean(),
     dateofbirth: Joi.string().isoDate(),
-    identities: Joi.array().includes(
+    identities: Joi.array().items(
       Joi.object().keys({
         identity: Joi.object().keys({
           idtype: Joi.number().integer(),
-          idparams: Joi.array().includes(
+          idparams: Joi.array().items(
             Joi.object().keys({
               idparam: Joi.object().keys({
                 idkey: Joi.any().valid(['IDNUMBER', 'MACHINEREADABLELINE1', 'MACHINEREADABLELINE2', 'MACHINEREADABLELINE3', 'EXPIRYDATE', 'VALIDUNTIL', 'PLACEOFISSUE', 'DATEOFISSUE', 'MAILSORT']),
                 idvalue: Joi.string().max(50)
               })
-            })
+            }).required()
           )
         })
-      })
+      }).required()
     ),
     demographics: Joi.object().keys({
       person: Joi.object().keys({
@@ -220,7 +220,7 @@ function search (searchData, opts, cb) {
 
     service.send(search.action, js2xml('Search06b', data), opts, function (er, res, xml) {
       if (er) return cb(er)
-      if (res.statusCode != 200) return cb(new Error("Unexpected service status " + res.statusCode))
+      if (res.statusCode != 200) return cb(new Error('Unexpected service status ' + res.statusCode + '. Body: ' + xml))
 
       xml2js.parseString(xml, {explicitArray: false}, function (er, obj) {
         if (er) return cb(er)

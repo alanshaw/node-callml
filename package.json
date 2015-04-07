@@ -11,11 +11,11 @@
   "license": "MIT",
   "devDependencies": {
     "istanbul": "^0.3.2",
-    "tape": "^3.0.1"
+    "tape": "^4.0.0"
   },
   "dependencies": {
     "data2xml": "^1.2.0",
-    "joi": "^5.1.0",
+    "joi": "^6.1.0",
     "moment": "^2.9.0",
     "request": "^2.45.0",
     "xml2js": "^0.4.4"
